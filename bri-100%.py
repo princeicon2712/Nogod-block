@@ -4,11 +4,12 @@ import json
 # ANSI escape codes for colored output
 GREEN = "\033[92m"
 RESET = "\033[0m"
+BOLD = "\033[1m"
 
 # Taking user input for UBRN and year range
-ubrn = str(input("What is the birthday No:--  "))
-start_year = int(input("Enter the start year:-- "))
-end_year = int(input("Enter the End year:--  "))
+ubrn = str(input(BOLD + "What is the birthday No:--  " + RESET))
+start_year = int(input(BOLD + "Enter the start year:--  " + RESET))
+end_year = int(input(BOLD + "Enter the End year:--  " + RESET))
 
 url = "https://ibas.finance.gov.bd/acs/general/BrnValidate"
 
@@ -40,15 +41,24 @@ for year in range(start_year, end_year + 1):  # Using user input for year range
                 response_data = response.json()
 
                 response_code = response_data.get("responseCode")
-                print(f"Trying DOB: {dob} -> Response Code: {response_code}")
+                
+                print(BOLD + (45 * "-") + RESET)  # Added line for separation
+                print(BOLD + f"Trying DOB: {dob} -> Response Code: {response_code}" + RESET)
 
                 if response_code == "0":  # If response code is "0", print success in GREEN
-                    print(GREEN + "Successfully processed!" + RESET)
+                    print(GREEN + BOLD + "Successfully processed!" + RESET)
+                    print(BOLD + (45 * "-") + RESET)
+                    print(GREEN + BOLD + f"Birthday No: {ubrn}" + RESET)
+                    print(GREEN + BOLD + f"Successfully processed! DOB No: {dob}" + RESET)
                     exit()
 
                 if response_code == "SUCCESS":  # Adjust based on actual success response
-                    print(f"Valid DOB found: {dob}")
+                    print(BOLD + f"Valid DOB found: {dob}" + RESET)
+                    print(BOLD + (45 * "-") + RESET)
+                    print(GREEN + BOLD + f"Birthday No: {ubrn}" + RESET)
+                    print(GREEN + BOLD + f"Successfully processed! DOB No: {dob}" + RESET)
                     exit()  # Stop execution if a valid DOB is found
 
             except Exception as e:
-                print(f"Error with DOB {dob}: {e}")
+                print(BOLD + f"Error with DOB {dob}: {e}" + RESET)
+                
