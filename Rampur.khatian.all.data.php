@@ -2,7 +2,7 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <title>খতিয়ান দিয়ে Holding ID খোঁজ</title>
+    <title>খতিয়ান দিয়ে (R.S) Rampur খোঁজ</title>
     <style>
         body { font-family: Arial; background: #f3f3f3; padding: 30px; }
         form { background: #fff; padding: 20px; border-radius: 10px; max-width: 500px; margin: auto; box-shadow: 0 0 10px #ccc; }
